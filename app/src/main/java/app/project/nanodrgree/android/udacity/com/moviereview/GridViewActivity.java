@@ -31,6 +31,10 @@ public class GridViewActivity extends ArrayAdapter<MovieAllDetails> {
         notifyDataSetChanged();
     }
 
+    public void addAll(ArrayList<MovieAllDetails>data){
+        this.data=data;
+        notifyDataSetChanged();
+    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;

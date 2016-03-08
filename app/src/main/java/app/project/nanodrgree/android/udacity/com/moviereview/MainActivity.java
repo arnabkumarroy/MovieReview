@@ -115,6 +115,9 @@ public class MainActivity extends AppCompatActivity {
             //String imageDetails[]=createImageArrayList(hashmapkeysize,result);
             //imageDetailsNew=imageDetails;
             gridAdapterObj.setGridData(result);
+            gridAdapterObj.addAll(result);
+            gridAdapterObj.notifyDataSetChanged();
+
             Log.e(TAG, "onPostExecute result");
         }
     }
@@ -191,5 +194,11 @@ public class MainActivity extends AppCompatActivity {
     private void updateAppdata() {
         GetUpcomingMovieListTask getUpcomingMovieListTaskObj=new GetUpcomingMovieListTask();
         getUpcomingMovieListTaskObj.execute();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateAppdata();
     }
 }
