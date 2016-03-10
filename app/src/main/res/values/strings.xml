@@ -29,6 +29,7 @@
     <string name="pref_header_general">Sorting</string>
 
     <string name="pref_title_popularity_to_messages">Popularity</string>
+    <string name="button">match_parent</string>
     <string-array name="pref_example_list_titles">
         <item>Popularity</item>
         <item>Release Date</item>

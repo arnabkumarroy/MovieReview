@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     GridView gridView;
-    ArrayList<MovieAllDetails> movieDetailsGlobal;
+    ArrayList<MovieAllDetails> movieDetailsGlobal=new ArrayList<MovieAllDetails>();
     GridViewActivity  gridAdapterObj;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,27 +34,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        movieDetailsGlobal=new ArrayList<MovieAllDetails>();
-        gridView = (GridView) findViewById(R.id.gridview);
-        gridAdapterObj = new GridViewActivity(this, R.layout.activity_grid_view,movieDetailsGlobal);
-        gridView.setAdapter(gridAdapterObj);
         updateAppdata();
-
+        gridView = (GridView) findViewById(R.id.gridview);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                /* Toast.makeText(MainActivity.this, "" + position,
                         Toast.LENGTH_SHORT).show();*/
-                ImageItem item = (ImageItem) parent.getItemAtPosition(position);
+                MovieAllDetails movieItem = (MovieAllDetails) parent.getItemAtPosition(position);
                 //Create intent
                 Intent intent = new Intent(getApplicationContext(), MovieDetails.class);
-                intent.putExtra("title", item.getOriginal_title());
+                intent.putExtra("title", movieItem.getOriginal_title());
                 intent.putExtra("MyClass", movieDetailsGlobal);
-                intent.putExtra("id", item.getId());
+                intent.putExtra("id", movieItem.getId());
                 //intent.putExtra("image", item.getImage());
-                Log.e(TAG, "title: " + item.getOriginal_title() + "image: " + item.getId());
+                Log.e(TAG, "title: " + movieItem.getOriginal_title() + "image: " + movieItem.getId()+"movieDetailsGlobal:"+movieDetailsGlobal.size());
 
                 //Start details activity
                 startActivity(intent);
@@ -102,8 +97,7 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<MovieAllDetails> movieDetails=getMoviedetailsfromDB();
            Log.e(TAG,"GetUpcomingMovieListTask:"+movieDetails);
            movieDetailsGlobal=movieDetails;
-            Log.e(TAG,"movieDetailsGlobal:"+movieDetailsGlobal);
-
+            Log.e(TAG, "movieDetailsGlobal:" + movieDetailsGlobal);
             return movieDetailsGlobal;
         }
 
@@ -111,13 +105,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<MovieAllDetails> result) {
             Log.e(TAG, "onPostExecute result:" + result);
-           // Log.e(TAG, "result.keySet():" + result.keySet());
-            //String imageDetails[]=createImageArrayList(hashmapkeysize,result);
-            //imageDetailsNew=imageDetails;
-            gridAdapterObj.setGridData(result);
-            gridAdapterObj.addAll(result);
-            gridAdapterObj.notifyDataSetChanged();
-
+            movieDetailsGlobal=result;
+            Log.e(TAG, "After GridView updated the data onStart:" + movieDetailsGlobal);
+            gridAdapterObj = new GridViewActivity(getApplicationContext(),movieDetailsGlobal);
+            gridView.setAdapter(gridAdapterObj);
             Log.e(TAG, "onPostExecute result");
         }
     }
@@ -199,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        updateAppdata();
+
     }
+
 }

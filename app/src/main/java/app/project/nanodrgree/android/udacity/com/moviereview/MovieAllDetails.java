@@ -1,9 +1,11 @@
 package app.project.nanodrgree.android.udacity.com.moviereview;
 
+import java.io.Serializable;
+
 /**
  * Created by ARNAB on 3/6/2016.
  */
-public class MovieAllDetails {
+public class MovieAllDetails implements Serializable {
 
     public String getOverview() {
         return overview;
