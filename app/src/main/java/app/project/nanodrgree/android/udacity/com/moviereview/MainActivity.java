@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<MovieAllDetails>jsonParseObj=null;
 
         try {
-            url = new URL("http://api.themoviedb.org/3/movie/upcoming?api_key=df6f8e7dfca7d7dc1b2e67a4361ce04e");
+            url = new URL("http://api.themoviedb.org/3/movie/now_playing?api_key=df6f8e7dfca7d7dc1b2e67a4361ce04e");
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
