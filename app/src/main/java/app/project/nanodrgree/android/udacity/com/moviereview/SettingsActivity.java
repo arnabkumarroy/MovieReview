@@ -101,7 +101,9 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         // to their values. When their values change, their summaries are
         // updated to reflect the new value, per the Android Design
         // guidelines.
-        bindPreferenceSummaryToValue(findPreference("example_list"));
+
+        //for each value there will be the bind preference Key
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.sortKey)));
 
 
     }

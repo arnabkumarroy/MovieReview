@@ -1,25 +1,6 @@
 <resources>
     <string name="app_name">Movie Review</string>
     <string name="action_settings">Customise</string>
-    <string-array name="image_ids">
-        <item>@drawable/sample_0</item>
-        <item>@drawable/sample_1</item>
-        <item>@drawable/sample_2</item>
-        <item>@drawable/sample_3</item>
-        <item>@drawable/sample_4</item>
-        <item>@drawable/sample_5</item>
-        <item>@drawable/sample_6</item>
-        <item>@drawable/sample_7</item>
-        <item>@drawable/sample_0</item>
-        <item>@drawable/sample_1</item>
-        <item>@drawable/sample_2</item>
-        <item>@drawable/sample_3</item>
-        <item>@drawable/sample_4</item>
-        <item>@drawable/sample_5</item>
-        <item>@drawable/sample_6</item>
-        <item>@drawable/sample_7</item>
-    </string-array>
-
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_settings">Settings</string>
 
@@ -27,15 +8,18 @@
 
     <!-- Example General settings -->
     <string name="pref_header_general">Sorting</string>
-
-    <string name="pref_title_popularity_to_messages">Popularity</string>
+    <string name="sortKey">sortKey</string>
+    <string name="defaultValue">popularity</string>
+    <string name="pref_title_popularity_to_messages">Sort By</string>
     <string name="button">match_parent</string>
     <string-array name="pref_example_list_titles">
+        <item>Now Playing</item>
         <item>Popularity</item>
         <item>Release Date</item>
     </string-array>
     <string-array name="pref_example_list_values">
-        <item>popularity</item>
-        <item>release_date</item>
+        <item>now_playing</item>
+        <item>popular</item>
+        <item>upcoming</item>
     </string-array>
 </resources>

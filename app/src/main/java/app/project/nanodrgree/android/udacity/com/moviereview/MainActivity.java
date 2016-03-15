@@ -1,8 +1,10 @@
 package app.project.nanodrgree.android.udacity.com.moviereview;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     GridView gridView;
     ArrayList<MovieAllDetails> movieDetailsGlobal=new ArrayList<MovieAllDetails>();
     GridViewActivity  gridAdapterObj;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("MyClass", movieDetailsGlobal);
                 intent.putExtra("id", movieItem.getId());
                 //intent.putExtra("image", item.getImage());
-                Log.e(TAG, "title: " + movieItem.getOriginal_title() + "image: " + movieItem.getId()+"movieDetailsGlobal:"+movieDetailsGlobal.size());
+                Log.e(TAG, "title: " + movieItem.getOriginal_title() + "image: " + movieItem.getId() + "movieDetailsGlobal:" + movieDetailsGlobal.size());
 
                 //Start details activity
                 startActivity(intent);
@@ -77,9 +80,17 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            startActivity(new Intent(this,SettingsActivity.class));
+            startActivity(new Intent(this, SettingsActivity.class));
+            GetUpcomingMovieListTask newGetUpcomingMovieObject=new GetUpcomingMovieListTask();
+            newGetUpcomingMovieObject.execute();
             return true;
         }
+        if (id == R.id.refresh) {
+            GetUpcomingMovieListTask newGetUpcomingMovieObject=new GetUpcomingMovieListTask();
+            newGetUpcomingMovieObject.execute();
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -94,7 +105,11 @@ public class MainActivity extends AppCompatActivity {
     private class GetUpcomingMovieListTask extends AsyncTask<Void, Void, ArrayList<MovieAllDetails>> {
         @Override
         protected ArrayList<MovieAllDetails> doInBackground(Void... urls) {
-            ArrayList<MovieAllDetails> movieDetails=getMoviedetailsfromDB();
+
+            SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String newPref=pref.getString(getString(R.string.sortKey),getString(R.string.defaultValue));
+            Log.e("Shared Preference: ",newPref+": inputValues: "+newPref);
+            ArrayList<MovieAllDetails> movieDetails=getMoviedetailsfromDB(newPref);
            Log.e(TAG,"GetUpcomingMovieListTask:"+movieDetails);
            movieDetailsGlobal=movieDetails;
             Log.e(TAG, "movieDetailsGlobal:" + movieDetailsGlobal);
@@ -115,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     //Call the Movie DB API for getting the movie Details.
-    protected ArrayList<MovieAllDetails> getMoviedetailsfromDB()
+    protected ArrayList<MovieAllDetails> getMoviedetailsfromDB(String queryString)
     {
         // http://api.themoviedb.org/3/movie/upcoming?api_key=df6f8e7dfca7d7dc1b2e67a4361ce04e
         URL url = null;
@@ -123,9 +138,20 @@ public class MainActivity extends AppCompatActivity {
         String upcomingMovieDetails=null;
         BufferedReader reader=null;
         ArrayList<MovieAllDetails>jsonParseObj=null;
+        String queryParam="";
+        String popular="popular";
+        String upcoming="upcoming";
+        if(queryString.equalsIgnoreCase(popular)){
+            queryParam=popular;
+        }else if(queryString.equalsIgnoreCase(upcoming)){
+            queryParam=upcoming;
+        }else{
+            queryParam="now_playing";
+        }
 
         try {
-            url = new URL("http://api.themoviedb.org/3/movie/now_playing?api_key=df6f8e7dfca7d7dc1b2e67a4361ce04e");
+            url = new URL("http://api.themoviedb.org/3/movie/"+queryParam+"?api_key=df6f8e7dfca7d7dc1b2e67a4361ce04e");
+
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
