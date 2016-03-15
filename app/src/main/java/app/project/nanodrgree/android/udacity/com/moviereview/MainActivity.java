@@ -25,7 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     private static final String TAG = MainActivity.class.getSimpleName();
     GridView gridView;
     ArrayList<MovieAllDetails> movieDetailsGlobal=new ArrayList<MovieAllDetails>();
@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("title", movieItem.getOriginal_title());
                 intent.putExtra("MyClass", movieDetailsGlobal);
                 intent.putExtra("id", movieItem.getId());
-                //intent.putExtra("image", item.getImage());
                 Log.e(TAG, "title: " + movieItem.getOriginal_title() + "image: " + movieItem.getId() + "movieDetailsGlobal:" + movieDetailsGlobal.size());
 
                 //Start details activity
@@ -81,13 +80,10 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
-            GetUpcomingMovieListTask newGetUpcomingMovieObject=new GetUpcomingMovieListTask();
-            newGetUpcomingMovieObject.execute();
             return true;
         }
         if (id == R.id.refresh) {
-            GetUpcomingMovieListTask newGetUpcomingMovieObject=new GetUpcomingMovieListTask();
-            newGetUpcomingMovieObject.execute();
+            updateAppdata();
             return true;
         }
 
@@ -110,8 +106,8 @@ public class MainActivity extends AppCompatActivity {
             String newPref=pref.getString(getString(R.string.sortKey),getString(R.string.defaultValue));
             Log.e("Shared Preference: ",newPref+": inputValues: "+newPref);
             ArrayList<MovieAllDetails> movieDetails=getMoviedetailsfromDB(newPref);
-           Log.e(TAG,"GetUpcomingMovieListTask:"+movieDetails);
-           movieDetailsGlobal=movieDetails;
+            Log.e(TAG,"GetUpcomingMovieListTask:"+movieDetails);
+            movieDetailsGlobal=movieDetails;
             Log.e(TAG, "movieDetailsGlobal:" + movieDetailsGlobal);
             return movieDetailsGlobal;
         }
@@ -124,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "After GridView updated the data onStart:" + movieDetailsGlobal);
             gridAdapterObj = new GridViewActivity(getApplicationContext(),movieDetailsGlobal);
             gridView.setAdapter(gridAdapterObj);
+            gridAdapterObj.notifyDataSetChanged();
+
             Log.e(TAG, "onPostExecute result");
         }
     }
@@ -218,5 +216,16 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
     }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Set up a listener whenever a key changes
+        updateAppdata();
+    }
+
+
 
 }

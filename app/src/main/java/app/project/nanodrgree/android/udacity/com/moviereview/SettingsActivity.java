@@ -105,7 +105,6 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         //for each value there will be the bind preference Key
         bindPreferenceSummaryToValue(findPreference(getString(R.string.sortKey)));
 
-
     }
 
    /* *//**
